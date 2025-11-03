@@ -3,132 +3,158 @@ PROYETO OSPF
 REDUNDANCIA Y SEGURIDAD DE REDES
 CREADO POR: ING. PABLO PALACIOS
 
-===================================================
+PROYECTO OSPF DOCUMENTADO LINEA POR LINEA
+
+============================
 ROUTER 1 (IZQUIERDA)
-====================================================
-enable
-configure terminal
-hostname Router1
-enable secret 5 MiEnableSecret
-no ip domain-lookup
-ip domain-name red.local
+============================
+enable                              		# Entrar en modo privilegiado
+configure terminal                 	 	# Entrar en modo configuración global
+hostname Router1                    		# Asignar nombre al router
+enable secret 5 MiEnableSecret      		# Configurar contraseña encriptada para modo enable
+no ip domain-lookup                 		# Desactivar búsqueda DNS para comandos mal escritos
+ip domain-name red.local            		# Configurar dominio de la red
 
-interface Loopback0
- ip address 1.1.1.1 255.255.255.255
+interface Loopback0                 		# Configurar interfaz loopback
+ ip address 1.1.1.1 255.255.255.255 		# Asignar IP a interfaz loopback (Router ID)
 !
-interface GigabitEthernet0/0
- description enlace a Router3
- ip address 10.0.13.1 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
+interface GigabitEthernet0/0       	 	   # Configurar interfaz GigabitEthernet0/0
+ description enlace a Router3       		   # Descripción del enlace
+ ip address 10.0.13.1 255.255.255.252 	  # Asignar dirección IP con máscara /30
+ no shutdown                        		   # Activar la interfaz
+ ip ospf network point-to-point     		   # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 		# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123 	# Configurar clave MD5 para autenticación
 !
-interface GigabitEthernet0/1
- description enlace a Router2
- ip address 10.0.12.1 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
+interface GigabitEthernet0/1       	 	  # Configurar interfaz GigabitEthernet0/1
+ description enlace a Router2       		  # Descripción del enlace
+ ip address 10.0.12.1 255.255.255.252 		# Asignar dirección IP con máscara /30
+ no shutdown                        		  # Activar la interfaz
+ ip ospf network point-to-point     		  # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 	# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123	# Configurar clave MD5 para autenticación
 !
-ip cef
+ip cef                              		    # Habilitar Cisco Express Forwarding
 !
-router ospf 1
- router-id 1.1.1.1
- passive-interface default
- no passive-interface GigabitEthernet0/0
- no passive-interface GigabitEthernet0/1
- network 10.0.13.0 0.0.0.3 area 0
- network 10.0.12.0 0.0.0.3 area 0
- network 1.1.1.1 0.0.0.0 area 0
+router ospf 1                      	 	    # Configurar proceso OSPF 1
+ router-id 1.1.1.1                  		    # Establecer Router ID manualmente
+ passive-interface default          		    # Por defecto, todas las interfaces en modo pasivo
+ no passive-interface GigabitEthernet0/0 	# Activar OSPF en interfaz específica
+ no passive-interface GigabitEthernet0/1 	# Activar OSPF en interfaz específica
+ network 10.0.13.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 10.0.12.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 1.1.1.1 0.0.0.0 area 0     		    # Incluir loopback en OSPF área 0
 exit
-write memory
-===================================================
+write memory                        		    # Guardar configuración en NVRAM
+
+============================
 ROUTER 2 (DERECHA)
-===================================================
-enable
-configure terminal
-hostname Router2
-enable secret 5 MiEnableSecret
-no ip domain-lookup
-ip domain-name red.local
+============================
+enable                              		# Entrar en modo privilegiado
+configure terminal                  		# Entrar en modo configuración global
+hostname Router2                    		# Asignar nombre al router
+enable secret 5 MiEnableSecret      		# Configurar contraseña encriptada para modo enable
+no ip domain-lookup                 		# Desactivar búsqueda DNS para comandos mal escritos
+ip domain-name red.local            		# Configurar dominio de la red
 
-interface Loopback0
- ip address 2.2.2.2 255.255.255.255
+interface Loopback0                 		# Configurar interfaz loopback
+ ip address 2.2.2.2 255.255.255.255 		# Asignar IP a interfaz loopback (Router ID)
 !
-interface GigabitEthernet0/0
- description enlace a Router3
- ip address 10.0.23.1 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
+interface GigabitEthernet0/0        		  # Configurar interfaz GigabitEthernet0/0
+ description enlace a Router3       	  	# Descripción del enlace
+ ip address 10.0.23.1 255.255.255.252 		# Asignar dirección IP con máscara /30
+ no shutdown                        	  	# Activar la interfaz
+ ip ospf network point-to-point     		  # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 		# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123 	# Configurar clave MD5 para autenticación
 !
-interface GigabitEthernet0/1
- description enlace a Router1
- ip address 10.0.12.2 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
+interface GigabitEthernet0/1        		   # Configurar interfaz GigabitEthernet0/1
+ description enlace a Router1       		   # Descripción del enlace
+ ip address 10.0.12.2 255.255.255.252 	 	# Asignar dirección IP con máscara /30
+ no shutdown                        	  	 # Activar la interfaz
+ ip ospf network point-to-point     	  	 # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 		# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123 	# Configurar clave MD5 para autenticación
 !
-ip cef
+ip cef                              		      # Habilitar Cisco Express Forwarding
 !
-router ospf 1
- router-id 2.2.2.2
- passive-interface default
- no passive-interface GigabitEthernet0/0
- no passive-interface GigabitEthernet0/1
- network 10.0.23.0 0.0.0.3 area 0
- network 10.0.12.0 0.0.0.3 area 0
- network 2.2.2.2 0.0.0.0 area 0
+router ospf 1                       		    # Configurar proceso OSPF 1
+ router-id 2.2.2.2                  		    # Establecer Router ID manualmente
+ passive-interface default          		    # Por defecto, todas las interfaces en modo pasivo
+ no passive-interface GigabitEthernet0/0  # Activar OSPF en interfaz específica
+ no passive-interface GigabitEthernet0/1  # Activar OSPF en interfaz específica
+ network 10.0.23.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 10.0.12.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 2.2.2.2 0.0.0.0 area 0     		    # Incluir loopback en OSPF área 0
 exit
-write memory
+write memory                        	    	# Guardar configuración en NVRAM
 
-===================================================
+============================
 ROUTER 3 (CENTRO - ARRIBA)
-===================================================
-enable
-configure terminal
-hostname Router3
-enable secret 5 MiEnableSecret
-no ip domain-lookup
-ip domain-name red.local
+============================
+enable                              		# Entrar en modo privilegiado
+configure terminal                  		# Entrar en modo configuración global
+hostname Router3                    		# Asignar nombre al router
+enable secret 5 MiEnableSecret      		# Configurar contraseña encriptada para modo enable
+no ip domain-lookup                 		# Desactivar búsqueda DNS para comandos mal escritos
+ip domain-name red.local            		# Configurar dominio de la red
 
-interface Loopback0
- ip address 3.3.3.3 255.255.255.255
+interface Loopback0                 		# Configurar interfaz loopback
+ ip address 3.3.3.3 255.255.255.255 		# Asignar IP a interfaz loopback (Router ID)
 !
-interface GigabitEthernet0/0
- description enlace a Router2
- ip address 10.0.23.2 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
- ip ospf cost 5
+interface GigabitEthernet0/0        		  # Configurar interfaz GigabitEthernet0/0
+ description enlace a Router2       		  # Descripción del enlace
+ ip address 10.0.23.2 255.255.255.252 		# Asignar dirección IP con máscara /30
+ no shutdown                        		  # Activar la interfaz
+ ip ospf network point-to-point     		  # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 		# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123 	# Configurar clave MD5 para autenticación
+ ip ospf cost 5                     		      # Establecer costo OSPF manualmente (métrica)
 !
-interface GigabitEthernet0/1
- description enlace a Router1
- ip address 10.0.13.2 255.255.255.252
- no shutdown
- ip ospf network point-to-point
- ip ospf authentication message-digest
- ip ospf message-digest-key 1 md5 cisco123
- ip ospf cost 5
+interface GigabitEthernet0/1        		  # Configurar interfaz GigabitEthernet0/1
+ description enlace a Router1       		  # Descripción del enlace
+ ip address 10.0.13.2 255.255.255.252 		# Asignar dirección IP con máscara /30
+ no shutdown                        		  # Activar la interfaz
+ ip ospf network point-to-point     		  # Configurar tipo de red OSPF punto a punto
+ ip ospf authentication message-digest 		# Habilitar autenticación MD5 para OSPF
+ ip ospf message-digest-key 1 md5 cisco123 	# Configurar clave MD5 para autenticación
+ ip ospf cost 5                     		      # Establecer costo OSPF manualmente (métrica)
 !
-ip cef
+ip cef                             		       # Habilitar Cisco Express Forwarding
 !
-router ospf 1
- router-id 3.3.3.3
- passive-interface default
- no passive-interface GigabitEthernet0/0
- no passive-interface GigabitEthernet0/1
- network 10.0.23.0 0.0.0.3 area 0
- network 10.0.13.0 0.0.0.3 area 0
- network 3.3.3.3 0.0.0.0 area 0
+router ospf 1                       		    # Configurar proceso OSPF 1
+ router-id 3.3.3.3                  		    # Establecer Router ID manualmente
+ passive-interface default          		    # Por defecto, todas las interfaces en modo pasivo
+ no passive-interface GigabitEthernet0/0 	# Activar OSPF en interfaz específica
+ no passive-interface GigabitEthernet0/1 	# Activar OSPF en interfaz específica
+ network 10.0.23.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 10.0.13.0 0.0.0.3 area 0   		    # Incluir red en OSPF área 0 con máscara wildcard
+ network 3.3.3.3 0.0.0.0 area 0     		    # Incluir loopback en OSPF área 0
 exit
-write memory
+write memory                        		    # Guardar configuración en NVRAM
+
+============================
+FINAL FELIZ
+============================
+
+
+RESUMEN DE CARACTERÍSTICAS OSPF IMPLEMENTADAS:
+
+Topología triangular con 3 routers
+
+-Área 0 (backbone) para todas las conexiones
+
+-Autenticación MD5 para seguridad
+
+-Router IDs definidos mediante interfaces loopback
+
+-Tipo de red punto a punto para enlaces seriales
+
+-Interfaces pasivas por defecto (mejora de seguridad/rendimiento)
+
+-Cisco Express Forwarding habilitado para mejor rendimiento
+
+
 ===================================================
 ===================================================
 CENTRO DE PRUEBAS
