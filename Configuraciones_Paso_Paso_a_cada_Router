@@ -9,7 +9,7 @@ PROYECTO OSPF DOCUMENTADO LINEA POR LINEA
 ROUTER 1 (IZQUIERDA)
 ============================
 enable                              		# Entrar en modo privilegiado
-configure terminal                 	 	  # Entrar en modo configuración global
+configure terminal                 	 	   # Entrar en modo configuración global
 hostname Router1                    		# Asignar nombre al router
 enable secret 5 MiEnableSecret      		# Configurar contraseña encriptada para modo enable
 no ip domain-lookup                 		# Desactivar búsqueda DNS para comandos mal escritos
